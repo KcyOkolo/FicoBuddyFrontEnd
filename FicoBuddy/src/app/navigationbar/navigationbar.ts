@@ -43,6 +43,15 @@ import { Component } from '@angular/core';
     font-family: Roboto, sans-serif;
   
   }
+   
+
+    li{
+      box-sizing: content-box;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: center;   
+      align-items: center;   
+    }
 
     nav{
       display: flex;
@@ -52,7 +61,7 @@ import { Component } from '@angular/core';
       color: black;
       width: 100%;
       height: 80px;
-      padding: 15px 200px;
+      padding: 10px 110px;
       position: fixed;
       top: 0;
       left: 0;
@@ -65,14 +74,14 @@ import { Component } from '@angular/core';
   
 
     .myFicologo{
-      width: 120px;
-      height:40px;
+      width: 170px;
+      height:57px;
     }
 
     .menuoptionsleft{
       list-style: none;
       display: flex;
-      gap: 30px;
+      gap: 0px;
       
       
       
@@ -82,7 +91,7 @@ import { Component } from '@angular/core';
     .menuoptionsright{
       list-style: none;
       display: flex;
-      gap: 30px;
+      gap: 0px;
       margin-left: 180px;
       
       
@@ -96,10 +105,8 @@ import { Component } from '@angular/core';
     }
 
     .FicoBuddy{
-      text-decoration: underline;
-      text-decoration-thickness: 2.5px;
-      text-underline-offset: 6px;
-      text-decoration-color: #0A6DE6;
+      border-bottom: 3.5px solid #0A6DE6;
+      
     }
     .login{
       border-radius: 20px;

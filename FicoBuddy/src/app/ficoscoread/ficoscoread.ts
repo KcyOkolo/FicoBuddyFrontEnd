@@ -18,11 +18,11 @@ import { Component } from '@angular/core';
     /* Make the wrapper “position: relative” so children can be positioned on top of each other */
     .fico-wrapper {
       position: relative;
-      top: 150px;
-      width: 350px;   /* match the image’s width */
-      height: 500px;  /* match the image’s height */
+      top: 130px;
+      width: 262.5px;   /* match the image’s width */
+      height: 375px;  /* match the image’s height */
       margin-left: auto;   /* center horizontally if needed */
-      margin-right: 20px;  /* or whatever right margin you prefer */
+      margin-right: 90px;  /* or whatever right margin you prefer */
       /* remove any top/left/right margins here if you want the wrapper to flow naturally */
     }
 
@@ -42,14 +42,14 @@ import { Component } from '@angular/core';
       transform: translateX(-50%);
       background-color: #0A6DE6;
       border: 1px solid #0A6DE6;
-      border-radius: 25px;
-      width: 180px;
-      height: 60px;
+      border-radius: 50px;
+      width: 135px;
+      height: 41.25px;
       display: flex;
       justify-content: center;
       align-items: center;
       color: white;
-      font-weight: 600;
+      font-weight: 500;
       z-index: 10;  /* ensure it sits on top of the image */
     }
 
