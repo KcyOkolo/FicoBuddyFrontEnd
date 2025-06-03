@@ -1,0 +1,23 @@
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: linear-gradient(
+    120deg,
+    #62c2ff 0%,
+    #8b75fb 100%
+  );
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* Ensure the card isn’t stuck to top/bottom */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* remove default scrollbars if you want a bit more padding */
+main, body, html {
+  overflow-x: hidden;
+}
