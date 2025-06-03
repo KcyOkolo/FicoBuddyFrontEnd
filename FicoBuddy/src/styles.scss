@@ -1,5 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
-body{
-    background: linear-gradient(to bottom, #2FC9FF 0%, #8F8BFC 55%);
-    height: 100vh;
+/* src/styles.scss */
+
+/* Make both html and body stretch to whatever page height is needed. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* 
+  A single, smooth vertical gradient from #2FC9FF at the top 
+  to #8F8BFC at the very bottom—no 55% “stop” or 100vh clipping. 
+*/
+body {
+  background: linear-gradient(to bottom, #2FC9FF 0%, #8F8BFC 100%);
+  background-attachment: fixed;  /* keeps the gradient pinned as you scroll */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

@@ -44,6 +44,7 @@ import { CommonModule } from '@angular/common';
       margin: 32px auto;       /* create space around the card */
       padding: 32px 24px;      /* inner spacing */
       max-width: 900px;        /* so the card never grows too wide */
+      margin-bottom: 50px;
     }
 
     /* -----------------------

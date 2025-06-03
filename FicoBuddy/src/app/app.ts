@@ -11,9 +11,19 @@ import { CreditInfoSection } from './credit-info-section/credit-info-section';
   standalone: true,
   imports: [RouterOutlet, Navigationbar, Ficoscoread, Notice, CreditInfoSection],
   template: `
+
+  
     <app-navigationbar></app-navigationbar>
     <app-ficoscoread></app-ficoscoread>
+
+    
+    <!-- push the card down by one full viewport height -->
+    <div style="height: 100vh;"></div>
+
     <app-credit-info-section></app-credit-info-section>
+
+    <!-- keep 50px of gradient visible underneath -->
+    <div style="height: 50px;"></div>
 
   
 

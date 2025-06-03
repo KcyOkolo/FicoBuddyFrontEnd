@@ -57,7 +57,9 @@ import { Component } from '@angular/core';
       top: 0;
       left: 0;
       right:0;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.33)
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.33);
+      z-index: 1000; /* ensure nav sits above the FICO image/button */
+
     }
 
   
