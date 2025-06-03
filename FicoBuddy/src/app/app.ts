@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Navigationbar } from './navigationbar/navigationbar';
+import { Ficoscoread } from './ficoscoread/ficoscoread';
+import { Notice } from './notice/notice';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Navigationbar, Ficoscoread, Notice],
   template: `
-    <h1>Welcome to {{title}}!</h1>
+    <app-navigationbar></app-navigationbar>
+    <app-ficoscoread></app-ficoscoread>
+  
 
     <router-outlet />
   `,
