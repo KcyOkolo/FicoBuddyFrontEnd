@@ -5,7 +5,8 @@ import { Component } from '@angular/core';
   imports: [],
   template: `
     <div>
-      <h2> FICO BUDDY: Your Credit Strategy Assistant </h2>
+      <h2> FICO BUDDY, </h2>
+      <h3>Your AI Credit Strategy Assistant</h3>
       <p> Your financial health is personal - so are our AI-powered tools. 
         Get customized credit score insights and improvement recommendations 
         tailored to your profile, enabling you to:</p>
@@ -43,8 +44,20 @@ import { Component } from '@angular/core';
       color: black;
       padding: 20px 20px;
       font-weight: 500;
-      font-size: 35px;
+      font-size: 38px;
+      
      
+    }
+
+    h3{
+      color: black;
+      padding: 10px 20px;
+      font-weight: 500;
+      font-size: 32px;
+      
+      margin-top: -70px;
+      margin-left: 12px;
+
     }
 
     p{
