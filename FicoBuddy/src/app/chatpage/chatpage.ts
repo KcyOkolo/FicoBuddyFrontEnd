@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+// src/app/chatpage/chatpage.ts
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { CommonModule }           from '@angular/common';
+import { Chatresponsesummary }    from '../chatresponsesummary/chatresponsesummary';
 
-// Allow message.text to be string or number
 interface ChatMessage {
   text: string | number;
   sender: 'bot' | 'user';
@@ -10,63 +11,93 @@ interface ChatMessage {
 @Component({
   selector: 'app-chatpage',
   standalone: true,
-  imports: [CommonModule],
+  imports: [ CommonModule, Chatresponsesummary ],
   template: `
-    <div class = "chatpage">
+    <!-- Outer flex container: LEFT = Chat UI, RIGHT = Responses -->
+    <div class="page-wrapper">
 
-      <!-- Chat Header -->
-      <div class = "chatheader">
-        <img
-          class = "ficologo"
-          src = "ficowhitelogo.png"
-          alt="FICO Logo"
-        />
-      </div>
+      <!-- LEFT COLUMN: Chat UI (now forced to a larger width) -->
+      <div class="chat-container">
+        <!-- Chat Header -->
+        <div class="chatheader">
+          <img
+            class="ficologo"
+            src="ficowhitelogo.png"
+            alt="FICO Logo"
+          />
+        </div>
 
-      <!-- Chat Body: loop through all messages -->
-      <div class="chatbody">
-        <div
-          *ngFor="let msg of messages"
-          [ngClass]="{
-            'bot-message': msg.sender === 'bot',
-            'user-message': msg.sender === 'user'
-          }"
-        >
-          {{ msg.text }}
+        <!-- Chat Body: loop through all messages -->
+        <div class="chatbody" #chatBody>
+          <ng-container *ngFor="let msg of messages">
+            <!-- BOT MESSAGE ROW -->
+            <div *ngIf="msg.sender === 'bot'" class="bot-row">
+              <img
+                class="bot-avatar"
+                src="/FICO_Circle_RGB_Blue.png"
+                alt="Bot Avatar"
+              />
+              <div class="bot-message">
+                {{ msg.text }}
+              </div>
+            </div>
+
+            <!-- USER MESSAGE -->
+            <div *ngIf="msg.sender === 'user'" class="user-message">
+              {{ msg.text }}
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- Chat Footer: input + send button -->
+        <div class="chatfooter">
+          <input
+            #msgInput
+            type="text"
+            class="chat-input"
+            placeholder="Start typing…"
+            (keydown.enter)="handleSend(msgInput.value); msgInput.value=''"
+          />
+          <button
+            class="send-button"
+            (click)="handleSend(msgInput.value); msgInput.value=''"
+          >
+            ▲
+          </button>
         </div>
       </div>
 
-      <!-- Chat Footer: input + send button -->
-      <div class="chatfooter">
-        <input
-          #msgInput
-          type="text"
-          class="chat-input"
-          placeholder="Start typing…"
-          (keydown.enter)="handleSend(msgInput.value); msgInput.value=''"
-        />
-        <button
-          class="send-button"
-          (click)="handleSend(msgInput.value); msgInput.value=''"
-        >
-          ▲
-        </button>
-      </div>
+      <!-- RIGHT COLUMN: Chatresponsesummary  -->
+      <app-chatresponsesummary
+        [currentCreditScore]="currentCreditScore"
+        [totalDebt]="totalDebt"
+      ></app-chatresponsesummary>
 
     </div>
   `,
   styles: [`
-    .chatpage {
+    /* --------------------------------
+       1) PAGE-WRAPPER: two columns
+       -------------------------------- */
+    .page-wrapper {
+      display: flex;
+      gap: 24px;          
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* -----------------------
+       2) CHAT CONTAINER (left) - make it originally wide
+       ----------------------- */
+    .chat-container {
+      flex: none;           /* do NOT shrink or grow */
+      width: 800px;         /* restore original chat width */
       display: flex;
       flex-direction: column;
       background-color: white;
-      max-width: 800px;
-      min-width: 400px;
-      width: clamp(320px, 90%, 800px);
-      min-height: 600px;
-      height: 600px;
+      height: 600px;        
       border-radius: 20px;
-      margin: 0 auto;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
@@ -80,7 +111,6 @@ interface ChatMessage {
       border-radius: 20px 20px 0 0;
       padding: 0 20px;
     }
-
     .ficologo {
       width: clamp(50px, 8%, 65px);
       height: clamp(18px, 3%, 23px);
@@ -96,10 +126,22 @@ interface ChatMessage {
       flex-direction: column;
     }
 
+    .bot-row {
+      display: flex;
+      align-items: flex-start;
+      margin: 6px 0;
+    }
+    .bot-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 8px;
+      object-fit: cover;
+      margin-top: 4px;
+    }
     .bot-message {
       display: table;
-      margin: 6px 0 6px 0;
-      background-color: #e0e0e0;
+      background-color: #ffffff;
       border: 1px solid #187bcd;
       color: #000;
       padding: 8px 12px;
@@ -107,10 +149,9 @@ interface ChatMessage {
       max-width: 70%;
       word-break: break-word;
     }
-
     .user-message {
       display: table;
-      margin: 6px 0 6px auto;    
+      margin: 6px 0 6px auto;
       background-color: #187bcd;
       color: white;
       padding: 8px 12px;
@@ -120,87 +161,112 @@ interface ChatMessage {
     }
 
     .chatfooter {
-    position: relative;        
-    display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    border-top: 1px solid #e0e0e0;
-    background-color: #ffffff;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-top: 1px solid #e0e0e0;
+      background-color: #ffffff;
     }
-
-
-  .chat-input {
-    flex: 1;
-    height: 40px;
-    padding: 0 12px;
-    padding-right: 60px;      
-    border: 1px solid #187bcd;
-    border-radius: 15px;      
-    font-size: 14px;
-    outline: none;
+    .chat-input {
+      flex: 1;
+      height: 40px;
+      padding: 0 12px;
+      padding-right: 60px;
+      border: 1px solid #187bcd;
+      border-radius: 15px;
+      font-size: 14px;
+      outline: none;
     }
-
-  .chat-input::placeholder {
+    .chat-input::placeholder {
       color: #999;
     }
-
-  .send-button {
-    position: absolute;       /* remove from normal flow, so it sits on top of the input’s right side */
-    right: 18px;              /* adjust to line up over the inner edge of the input’s border */
-    top: 50%;
-    transform: translateY(-50%);
-    width: 28px;
-    height: 28px;
-    background-color: #187bcd;
-    border: none;
-    border-radius: 50%;
-    color: white;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    .send-button {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      background-color: #187bcd;
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
     }
     .send-button:hover {
       background-color: #0f539d;
     }
 
-    @media (min-width: 768px) {
-      .chatpage {
-        width: 80%;
+    /* -----------------------
+       3) RESPONSIVE: stack vertically on narrow screens
+       ----------------------- */
+    @media (max-width: 1100px) {
+      .page-wrapper {
+        flex-direction: column;
+        align-items: center;
       }
-      .chatheader {
-        padding: 0 33px;
+      .chat-container {
+        width: 90%;       
       }
-    }
-    @media (min-width: 1024px) {
-      .chatpage {
-        width: 800px;
-      }
+      /* Chatsummary will automatically shrink below 309px */
     }
   `]
 })
 export class Chatpage {
-  // Now each message.text can be a string or a number
   messages: ChatMessage[] = [];
 
-  /** Called whenever the user presses Enter or clicks the ▲ button */
+  // Two properties to pass into the summary panel
+  currentCreditScore: number | null = null;
+  totalDebt:        number | null = null;
+
+  @ViewChild('chatBody', { static: false })
+  private chatBodyRef!: ElementRef<HTMLDivElement>;
+
   handleSend(raw: string) {
     const trimmed = raw.trim();
     if (!trimmed) return;
 
-    // 1) If the trimmed value is a valid integer, convert it:
+    // Convert numeric input to a number, otherwise keep as string
     const parsedNumber = Number(trimmed);
-    const finalText: string | number = 
+    const finalText: string | number =
       !isNaN(parsedNumber) && Number.isInteger(parsedNumber)
         ? parsedNumber
         : trimmed;
 
-    // 2) Add the user's message (string or integer)
+    // 1) Add the user's message
     this.messages.push({ text: finalText, sender: 'user' });
 
-    // 3) Immediately add the static bot response
+    // 2) After the user’s first answer (index 2 in the array), store as currentCreditScore
+    if (this.messages.length === 2) {
+      this.currentCreditScore =
+        typeof finalText === 'number'
+          ? finalText
+          : parseInt(finalText as string, 10) || null;
+    }
+
+    // 3) After the user’s second answer (index 4 in the array), store as totalDebt
+    if (this.messages.length === 4) {
+      this.totalDebt =
+        typeof finalText === 'number'
+          ? finalText
+          : parseInt(finalText as string, 10) || null;
+    }
+
+    // 4) Immediately add the static bot response
     this.messages.push({ text: 'Fico Buddy is coming soon…', sender: 'bot' });
+
+    // 5) Scroll the chatbody to the bottom
+    setTimeout(() => this.scrollToBottom(), 0);
+  }
+
+  private scrollToBottom(): void {
+    const el = this.chatBodyRef.nativeElement;
+    el.scrollTop = el.scrollHeight;
   }
 }

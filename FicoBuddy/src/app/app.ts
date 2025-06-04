@@ -5,12 +5,11 @@ import { Ficoscoread } from './ficoscoread/ficoscoread';
 import { Notice } from './notice/notice';
 import { CreditInfoSection } from './credit-info-section/credit-info-section';
 import { Chatpage } from './chatpage/chatpage';
-import { Chatresponsesummary } from './chatresponsesummary/chatresponsesummary';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Navigationbar, Ficoscoread, Notice, CreditInfoSection, Chatpage, Chatresponsesummary],
+  imports: [RouterOutlet, Navigationbar, Ficoscoread, Notice, CreditInfoSection, Chatpage],
   template: `
 
     <header>
@@ -26,7 +25,6 @@ import { Chatresponsesummary } from './chatresponsesummary/chatresponsesummary';
 
     <main class = "chatbox"> 
       <app-chatpage></app-chatpage>
-      <app-chatresponsesummary></app-chatresponsesummary>
     </main>
     
     <div style="height: 10vh;"></div>
