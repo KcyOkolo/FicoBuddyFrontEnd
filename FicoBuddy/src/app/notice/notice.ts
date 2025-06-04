@@ -26,7 +26,7 @@ import { Component } from '@angular/core';
   `,
   styles: [`
     div{
-      
+      font-family: "Lato", sans-serif;
       max-width: 800px;
       width:90%;
       min-height: 400px;

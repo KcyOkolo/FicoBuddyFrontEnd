@@ -79,7 +79,7 @@ import { CommonModule } from '@angular/common';
        ----------------------- */
     .grid-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(4, minmax(160px, 1fr));
       gap: 20px;
       justify-items: center;
     }
