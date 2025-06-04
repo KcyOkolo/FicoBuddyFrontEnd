@@ -7,12 +7,11 @@ html, body {
   padding: 0;
 }
 
-/* 
-  A single, smooth vertical gradient from #2FC9FF at the top 
-  to #8F8BFC at the very bottom—no 55% “stop” or 100vh clipping. 
-*/
+
 body {
   background: linear-gradient(to bottom, #2FC9FF 0%, #8F8BFC 100%);
   background-attachment: fixed;  /* keeps the gradient pinned as you scroll */
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
+

@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-ficoscoread',
   standalone: true,
   template: `
-    <!-- Relative wrapper so the button can be positioned over the image -->
+  
     <div class="fico-wrapper">
       <img
         src="FicoScore.png"
@@ -15,48 +15,59 @@ import { Component } from '@angular/core';
     </div>
   `,
   styles: [`
-    /* Make the wrapper “position: relative” so children can be positioned on top of each other */
+  
     .fico-wrapper {
-      position: relative;
-      top: 130px;
-      width: 262.5px;   /* match the image’s width */
-      height: 375px;  /* match the image’s height */
-      margin-left: auto;   /* center horizontally if needed */
-      margin-right: 90px;  /* or whatever right margin you prefer */
-      /* remove any top/left/right margins here if you want the wrapper to flow naturally */
-    }
+  margin-top: 19px;
+  position: relative;
+  max-width: 262.5px;      
+  width: 100%;            
+  aspect-ratio: 262.5/375; 
+  min-width: 200px;      
+}
 
-    /* The image itself */
-    .fico-image {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* ensures it fills the wrapper */
-    }
+.fico-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-    /* The button, absolutely positioned over the bottom portion of the image */
-    .fico-button {
-      position: absolute;
-      bottom: 18%;
-      left: 52%;
-      transform: translateX(-50%);
-      background-color: #0A6DE6;
-      border: 1px solid #0A6DE6;
-      border-radius: 50px;
-      width: 135px;
-      height: 41.25px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-weight: 500;
-      z-index: 10;  /* ensure it sits on top of the image */
-    }
+.fico-button {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;              
+  transform: translateX(-50%);
+  background-color: #0A6DE6;
+  border: 1px solid #0A6DE6;
+  border-radius: 50px;
+  width: min(135px, 60%); 
+  height: clamp(35px, 11%, 41.25px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 500;
+  font-size: clamp(12px, 2.5vw, 14px); /* Responsive font */
+  z-index: 10;
+}
 
-    .fico-button:hover {
-      background-color: rgb(7, 89, 190);
-      cursor: pointer;
-    }
+.fico-button:hover {
+  background-color: rgb(7, 89, 190);
+  cursor: pointer;
+}
+
+
+@media (max-width: 480px) {
+  .fico-wrapper {
+    max-width: 200px;
+  }
+}
+
+@media (min-width: 768px) {
+  .fico-wrapper {
+    max-width: 300px;
+  }
+}
   `]
 })
 export class Ficoscoread {}

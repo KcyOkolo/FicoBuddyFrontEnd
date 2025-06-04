@@ -61,7 +61,7 @@ import { Component } from '@angular/core';
       color: black;
       width: 100%;
       height: 80px;
-      padding: 10px 110px;
+      padding: 10px 20px;
       position: fixed;
       top: 0;
       left: 0;
@@ -69,6 +69,18 @@ import { Component } from '@angular/core';
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.33);
       z-index: 1000; /* ensure nav sits above the FICO image/button */
 
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        padding: 10px 50px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      nav {
+        padding: 10px 110px;
+      }
     }
 
   
@@ -82,9 +94,7 @@ import { Component } from '@angular/core';
       list-style: none;
       display: flex;
       gap: 0px;
-      
-      
-      
+      flex-shrink: 0;
     }
 
 
@@ -92,7 +102,8 @@ import { Component } from '@angular/core';
       list-style: none;
       display: flex;
       gap: 0px;
-      margin-left: 180px;
+      margin-left: auto;
+      flex-shrink: 0;
       
       
     }
