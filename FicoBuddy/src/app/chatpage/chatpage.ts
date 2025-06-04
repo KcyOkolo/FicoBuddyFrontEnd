@@ -3,6 +3,7 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { CommonModule }           from '@angular/common';
 import { Chatresponsesummary }    from '../chatresponsesummary/chatresponsesummary';
+import { Chat } from '../chat';
 
 interface ChatMessage {
   text: string | number;
@@ -114,7 +115,7 @@ interface ChatMessage {
 
     .ficologo {
       width: clamp(50px, 8%, 65px);
-      height: clamp(18px, 3%, 23px);
+      height: auto;
       margin-right: auto;
     }
 
@@ -225,6 +226,12 @@ export class Chatpage implements OnInit {
   messages: ChatMessage[] = [];
   answers: Array<string | number> = [];
 
+  //constructor(private chatservice: Chat){};
+
+  
+
+  
+
   @ViewChild('chatBody', { static: false })
   private chatBodyRef!: ElementRef<HTMLDivElement>;
 
@@ -255,6 +262,16 @@ export class Chatpage implements OnInit {
 
     // 3) Record the answer (no separate variables—just push into `answers[]`)
     this.answers.push(finalText);
+
+    /* sending user input to ai and receiving output
+    
+    this.chatservice.SendMessageToAI(finalText).subscribe(response =>
+    {
+      this.messages.push({ text: response, sender: 'bot' });
+
+    });
+
+    */
 
     // 4) Immediately follow with a static bot reply
     this.messages.push({ text: 'Fico Buddy is coming soon…', sender: 'bot' });
