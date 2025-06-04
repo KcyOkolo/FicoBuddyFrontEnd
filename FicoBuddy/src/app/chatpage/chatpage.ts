@@ -1,5 +1,6 @@
 // src/app/chatpage/chatpage.ts
-import { Component, ElementRef, ViewChild } from '@angular/core';
+
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { CommonModule }           from '@angular/common';
 import { Chatresponsesummary }    from '../chatresponsesummary/chatresponsesummary';
 
@@ -16,7 +17,7 @@ interface ChatMessage {
     <!-- Outer flex container: LEFT = Chat UI, RIGHT = Responses -->
     <div class="page-wrapper">
 
-      <!-- LEFT COLUMN: Chat UI (now forced to a larger width) -->
+      <!-- LEFT COLUMN: Chat UI -->
       <div class="chat-container">
         <!-- Chat Header -->
         <div class="chatheader">
@@ -42,7 +43,7 @@ interface ChatMessage {
               </div>
             </div>
 
-            <!-- USER MESSAGE -->
+            <!-- USER MESSAGE ROW -->
             <div *ngIf="msg.sender === 'user'" class="user-message">
               {{ msg.text }}
             </div>
@@ -67,10 +68,9 @@ interface ChatMessage {
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: Chatresponsesummary  -->
+      <!-- RIGHT COLUMN: Summary panel -->
       <app-chatresponsesummary
-        [currentCreditScore]="currentCreditScore"
-        [totalDebt]="totalDebt"
+        [answers]="answers"
       ></app-chatresponsesummary>
 
     </div>
@@ -88,11 +88,11 @@ interface ChatMessage {
     }
 
     /* -----------------------
-       2) CHAT CONTAINER (left) - make it originally wide
+       2) CHAT CONTAINER (left)
        ----------------------- */
     .chat-container {
-      flex: none;           /* do NOT shrink or grow */
-      width: 800px;         /* restore original chat width */
+      flex: none;          
+      width: 800px;         
       display: flex;
       flex-direction: column;
       background-color: white;
@@ -111,6 +111,7 @@ interface ChatMessage {
       border-radius: 20px 20px 0 0;
       padding: 0 20px;
     }
+
     .ficologo {
       width: clamp(50px, 8%, 65px);
       height: clamp(18px, 3%, 23px);
@@ -149,6 +150,7 @@ interface ChatMessage {
       max-width: 70%;
       word-break: break-word;
     }
+
     .user-message {
       display: table;
       margin: 6px 0 6px auto;
@@ -181,6 +183,7 @@ interface ChatMessage {
     .chat-input::placeholder {
       color: #999;
     }
+
     .send-button {
       position: absolute;
       right: 18px;
@@ -204,7 +207,7 @@ interface ChatMessage {
     }
 
     /* -----------------------
-       3) RESPONSIVE: stack vertically on narrow screens
+       3) RESPONSIVE: stack vertically on small screens
        ----------------------- */
     @media (max-width: 1100px) {
       .page-wrapper {
@@ -212,56 +215,51 @@ interface ChatMessage {
         align-items: center;
       }
       .chat-container {
-        width: 90%;       
+        width: 90%;
       }
-      /* Chatsummary will automatically shrink below 309px */
+      /* The summary panel below 309px width will shrink automatically */
     }
   `]
 })
-export class Chatpage {
+export class Chatpage implements OnInit {
   messages: ChatMessage[] = [];
-
-  // Two properties to pass into the summary panel
-  currentCreditScore: number | null = null;
-  totalDebt:        number | null = null;
+  answers: Array<string | number> = [];
 
   @ViewChild('chatBody', { static: false })
   private chatBodyRef!: ElementRef<HTMLDivElement>;
+
+  // 1) As soon as this component mounts, push an initial bot question
+  ngOnInit() {
+    this.messages.push({
+      text: 'Firstly, what is your current credit score?',
+      sender: 'bot'
+    });
+
+    // Scroll “just in case”—though on very first render it isn’t strictly needed
+    setTimeout(() => this.scrollToBottom(), 0);
+  }
 
   handleSend(raw: string) {
     const trimmed = raw.trim();
     if (!trimmed) return;
 
-    // Convert numeric input to a number, otherwise keep as string
+    // If it’s an integer string, convert to a number; else keep as string
     const parsedNumber = Number(trimmed);
     const finalText: string | number =
       !isNaN(parsedNumber) && Number.isInteger(parsedNumber)
         ? parsedNumber
         : trimmed;
 
-    // 1) Add the user's message
+    // 2) User’s message appears in the chat window
     this.messages.push({ text: finalText, sender: 'user' });
 
-    // 2) After the user’s first answer (index 2 in the array), store as currentCreditScore
-    if (this.messages.length === 2) {
-      this.currentCreditScore =
-        typeof finalText === 'number'
-          ? finalText
-          : parseInt(finalText as string, 10) || null;
-    }
+    // 3) Record the answer (no separate variables—just push into `answers[]`)
+    this.answers.push(finalText);
 
-    // 3) After the user’s second answer (index 4 in the array), store as totalDebt
-    if (this.messages.length === 4) {
-      this.totalDebt =
-        typeof finalText === 'number'
-          ? finalText
-          : parseInt(finalText as string, 10) || null;
-    }
-
-    // 4) Immediately add the static bot response
+    // 4) Immediately follow with a static bot reply
     this.messages.push({ text: 'Fico Buddy is coming soon…', sender: 'bot' });
 
-    // 5) Scroll the chatbody to the bottom
+    // 5) Auto‐scroll after view updates
     setTimeout(() => this.scrollToBottom(), 0);
   }
 

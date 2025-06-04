@@ -4,29 +4,29 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-chatresponsesummary',
   standalone: true,
-  imports: [CommonModule],  
+  imports: [CommonModule],
   template: `
     <div class="chatsummary">
       <!-- Blue header bar -->
       <div class="chatheader"></div>
 
-      <!-- Body: show the two values if they're not null -->
+      <!-- Summary body: questions + user answers -->
       <div class="summary-body">
-        <h3>Responses:</h3>
+        <h3 class="responses-title">Responses:</h3>
 
-        <!-- currentCreditScore -->
-        <div class="response-item" *ngIf="currentCreditScore !== null">
-          <strong>Current Credit Score:</strong>
-          <div class="response-value">{{ currentCreditScore }}</div>
-        </div>
+        <!-- Loop over answers; i is index → question[i] -->
+        <ng-container *ngFor="let ans of answers; index as i">
+          <div class="response-item">
+            <strong class="question-text">
+              {{ questions[i] }}
+            </strong>
+            <div class="response-value">
+              {{ ans }}
+            </div>
+          </div>
+        </ng-container>
 
-        <!-- totalDebt -->
-        <div class="response-item" *ngIf="totalDebt !== null">
-          <strong>Total debt across all accounts ($):</strong>
-          <div class="response-value">{{ totalDebt }}</div>
-        </div>
-
-        <!-- Get Action Plan button always at bottom -->
+        <!-- “Get Action Plan” button at bottom -->
         <button class="action-plan-button">
           Get Action Plan
         </button>
@@ -45,7 +45,7 @@ import { Component, Input } from '@angular/core';
       flex-direction: column;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      flex: none;           
+      flex: none;              
     }
 
     .chatheader {
@@ -66,7 +66,7 @@ import { Component, Input } from '@angular/core';
       flex-direction: column;
     }
 
-    .summary-body h3 {
+    .responses-title {
       margin: 0 0 12px 0;
       font-size: 18px;
       font-weight: 600;
@@ -74,16 +74,18 @@ import { Component, Input } from '@angular/core';
       color: #333;
     }
 
-
     .response-item {
       margin-bottom: 16px;
     }
-    .response-item strong {
+
+    .question-text {
       display: block;
       font-size: 14px;
       margin-bottom: 4px;
       color: #555;
+      line-height: 1.4;
     }
+
     .response-value {
       font-size: 16px;
       color: #000;
@@ -116,6 +118,19 @@ import { Component, Input } from '@angular/core';
   `]
 })
 export class Chatresponsesummary {
-  @Input() currentCreditScore: number | null = null;
-  @Input() totalDebt:        number | null = null;
+  /**
+   * The parent <app-chatpage> will pass in every user answer 
+   * as this `answers` array. 
+   */
+  @Input() answers: Array<string | number> = [];
+
+  /**
+   * A hard‐coded list of question strings.  The i‐th element of this array
+   * is displayed next to the i‐th answer in `answers[]`.  Add more
+   * questions here if your chat flow asks more than two questions.
+   */
+  questions: string[] = [
+    'Firstly, what is your current credit score?',
+    // → If you later ask a second question, add it here, e.g.:
+  ];
 }
