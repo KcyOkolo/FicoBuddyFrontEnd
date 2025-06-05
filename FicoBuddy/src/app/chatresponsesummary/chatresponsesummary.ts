@@ -124,13 +124,9 @@ export class Chatresponsesummary {
    */
   @Input() answers: Array<string | number> = [];
 
-  /**
-   * A hard‐coded list of question strings.  The i‐th element of this array
-   * is displayed next to the i‐th answer in `answers[]`.  Add more
-   * questions here if your chat flow asks more than two questions.
-   */
+  
   questions: string[] = [
     'Firstly, what is your current credit score?',
-    // → If you later ask a second question, add it here, e.g.:
+    // add second question here
   ];
 }

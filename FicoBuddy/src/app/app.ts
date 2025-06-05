@@ -59,7 +59,7 @@ import { Chatpage } from './chatpage/chatpage';
 
       @media (max-width: 1200px) {
         .parent-flex-container {
-          flex-direction: column; /* Stack vertically on smaller screens */
+          flex-direction: column; 
           align-items: center;
           }
         }

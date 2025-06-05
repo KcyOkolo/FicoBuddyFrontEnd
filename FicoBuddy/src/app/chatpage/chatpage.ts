@@ -208,7 +208,7 @@ interface ChatMessage {
     }
 
     /* -----------------------
-       3) RESPONSIVE: stack vertically on small screens
+       stack vertically on small screens
        ----------------------- */
     @media (max-width: 1100px) {
       .page-wrapper {
@@ -218,7 +218,7 @@ interface ChatMessage {
       .chat-container {
         width: 90%;
       }
-      /* The summary panel below 309px width will shrink automatically */
+     
     }
   `]
 })
@@ -235,14 +235,14 @@ export class Chatpage implements OnInit {
   @ViewChild('chatBody', { static: false })
   private chatBodyRef!: ElementRef<HTMLDivElement>;
 
-  // 1) As soon as this component mounts, push an initial bot question
+  // As soon as this component mounts, push an initial bot question
   ngOnInit() {
     this.messages.push({
       text: 'Firstly, what is your current credit score?',
       sender: 'bot'
     });
 
-    // Scroll “just in case”—though on very first render it isn’t strictly needed
+    // Scroll “just in case”
     setTimeout(() => this.scrollToBottom(), 0);
   }
 
@@ -257,11 +257,12 @@ export class Chatpage implements OnInit {
         ? parsedNumber
         : trimmed;
 
-    // 2) User’s message appears in the chat window
+    // User’s message appears in the chat window
     this.messages.push({ text: finalText, sender: 'user' });
 
-    // 3) Record the answer (no separate variables—just push into `answers[]`)
+    // push finalText to answers array
     this.answers.push(finalText);
+
 
     /* sending user input to ai and receiving output
     
@@ -273,10 +274,10 @@ export class Chatpage implements OnInit {
 
     */
 
-    // 4) Immediately follow with a static bot reply
+    // placeholder ai response. delete after back-end code above is implemented
     this.messages.push({ text: 'Fico Buddy is coming soon…', sender: 'bot' });
 
-    // 5) Auto‐scroll after view updates
+    // Auto‐scroll after view updates
     setTimeout(() => this.scrollToBottom(), 0);
   }
 

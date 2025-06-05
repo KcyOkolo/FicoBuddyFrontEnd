@@ -41,9 +41,9 @@ import { CommonModule } from '@angular/common';
       background: white;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      margin: 32px auto;       /* create space around the card */
-      padding: 32px 24px;      /* inner spacing */
-      max-width: 900px;        /* so the card never grows too wide */
+      margin: 32px auto;       
+      padding: 32px 24px;      
+      max-width: 900px;        
       margin-bottom: 50px;
     }
 
@@ -52,8 +52,8 @@ import { CommonModule } from '@angular/common';
        (adjusted spacing to fit inside .card)
        ----------------------- */
     .credit-section {
-      margin: 0;               /* remove external margin, card handles outer spacing */
-      padding: 0;              /* remove padding, card handles it */
+      margin: 0;               
+      padding: 0;              
       text-align: center;
     }
     .credit-section h2 {
@@ -129,7 +129,7 @@ import { CommonModule } from '@angular/common';
     }
 
     /* -----------------------
-       HOVER EFFECT (blue bg + white text)
+       CIRCLE HOVER EFFECT 
        ----------------------- */
     .circle:hover {
       background-color: #187bcd;
