@@ -15,10 +15,10 @@ interface ChatMessage {
   standalone: true,
   imports: [ CommonModule, Chatresponsesummary ],
   template: `
-    <!-- Outer flex container: LEFT = Chat UI, RIGHT = Responses -->
+    <!-- Outer flex container: LEFT = Chatbox, RIGHT = Responses -->
     <div class="page-wrapper">
 
-      <!-- LEFT COLUMN: Chat UI -->
+      <!-- LEFT COLUMN: Chatbox -->
       <div class="chat-container">
         <!-- Chat Header -->
         <div class="chatheader">
@@ -69,7 +69,7 @@ interface ChatMessage {
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: Summary panel -->
+      <!-- RIGHT COLUMN: Responses -->
       <app-chatresponsesummary
         [answers]="answers"
       ></app-chatresponsesummary>
@@ -78,7 +78,7 @@ interface ChatMessage {
   `,
   styles: [`
     /* --------------------------------
-       1) PAGE-WRAPPER: two columns
+       PAGE-WRAPPER: two columns
        -------------------------------- */
     .page-wrapper {
       display: flex;
@@ -89,7 +89,7 @@ interface ChatMessage {
     }
 
     /* -----------------------
-       2) CHAT CONTAINER (left)
+        CHAT BOX (left)
        ----------------------- */
     .chat-container {
       flex: none;          
