@@ -1,9 +1,10 @@
-// src/app/chatpage/chatpage.ts
+
 
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { CommonModule }           from '@angular/common';
 import { Chatresponsesummary }    from '../chatresponsesummary/chatresponsesummary';
 import { Chat } from '../chat';
+
 
 interface ChatMessage {
   text: string | number;
@@ -226,7 +227,7 @@ export class Chatpage implements OnInit {
   messages: ChatMessage[] = [];
   answers: Array<string | number> = [];
 
-  //constructor(private chatservice: Chat){};
+  constructor(private chatservice: Chat){};
 
   
 
@@ -264,18 +265,14 @@ export class Chatpage implements OnInit {
     this.answers.push(finalText);
 
 
-    /* sending user input to ai and receiving output
     
     this.chatservice.SendMessageToAI(finalText).subscribe(response =>
     {
-      this.messages.push({ text: response, sender: 'bot' });
+      this.messages.push({ text: response.response, sender: 'bot' });
 
     });
 
-    */
-
-    // placeholder ai response. delete after back-end code above is implemented
-    this.messages.push({ text: 'Fico Buddy is coming soon…', sender: 'bot' });
+    
 
     // Auto‐scroll after view updates
     setTimeout(() => this.scrollToBottom(), 0);

@@ -6,6 +6,7 @@ import { Notice } from './notice/notice';
 import { CreditInfoSection } from './credit-info-section/credit-info-section';
 import { Chatpage } from './chatpage/chatpage';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
