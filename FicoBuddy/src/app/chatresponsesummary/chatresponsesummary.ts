@@ -38,7 +38,7 @@ import { Component, Input } from '@angular/core';
       background-color: white;
       max-width: 309px;
       width: 100%;
-      min-width: 250px;
+      min-width: 330px;
       height: 600px;           
       border-radius: 20px;
       display: flex;
