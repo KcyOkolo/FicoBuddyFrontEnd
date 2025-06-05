@@ -48,7 +48,7 @@ import { Component } from '@angular/core';
       background: linear-gradient(to right, #0A6DE6, #9747FF);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      diplay: inline-block;
+      display: inline-block;
          
      
     }
