@@ -43,7 +43,8 @@ import { Chatpage } from './chatpage/chatpage';
         display: flex;
         margin-top: 130px;
         justify-content: center;
-        gap: 20px;
+        gap: 50px;
+        margin-left: -10px;
         
         }
 

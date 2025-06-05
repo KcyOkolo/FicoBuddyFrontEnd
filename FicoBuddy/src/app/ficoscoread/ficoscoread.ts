@@ -17,12 +17,12 @@ import { Component } from '@angular/core';
   styles: [`
   
     .fico-wrapper {
-  margin-top: 19px;
+  margin-top: 32px;
   position: relative;
-  max-width: 262.5px;      
-  width: 100%;            
-  aspect-ratio: 262.5/375; 
-  min-width: 200px;      
+  max-width: 100px;
+  width: 80%;            
+  
+  min-width: 150px;      
 }
 
 .fico-image {
