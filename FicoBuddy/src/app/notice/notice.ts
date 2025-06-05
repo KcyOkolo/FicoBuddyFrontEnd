@@ -44,8 +44,12 @@ import { Component } from '@angular/core';
       color: black;
       padding: 20px 20px;
       font-weight: 500;
-      font-size: 38px;
-      
+      font-size: 42px;
+      background: linear-gradient(to right, #0A6DE6, #9747FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      diplay: inline-block;
+         
      
     }
 
@@ -53,7 +57,7 @@ import { Component } from '@angular/core';
       color: black;
       padding: 10px 20px;
       font-weight: 500;
-      font-size: 32px;
+      font-size: 30px;
       
       margin-top: -70px;
       margin-left: 12px;
@@ -73,6 +77,8 @@ import { Component } from '@angular/core';
       padding: 30px 20px;
       font-size: 10px;
       color: grey;
+      margin-top: 40px;
+
     }
 
     
