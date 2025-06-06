@@ -223,6 +223,9 @@ export class Chatpage implements OnInit, AfterViewChecked {
   answers:   Array<string | number>  = [];
   private shouldScrollChat = false;
 
+  /** New property added below: */
+  showRecommendations = false;
+
   @Output() actionPlanRequested = new EventEmitter<void>();
 
   constructor(private chatservice: Chat) {}
