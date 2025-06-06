@@ -240,48 +240,43 @@ export class Chatpage implements OnInit {
   // As soon as this component mounts, push an initial bot question
   ngOnInit() {
     
-    this.messages.push({
-      text: "To begin, say 'hello'",
-      sender: "bot"
-    });
-    
+  this.chatservice.SendMessageToAI("__start__").subscribe(response => {
+    this.messages.push({ text: response.response, sender: 'bot' });
+    setTimeout(() => this.scrollToBottom(), 0);
+});
 
     
 
+    
     // Scroll “just in case”
     setTimeout(() => this.scrollToBottom(), 0);
   }
 
+
+
   handleSend(raw: string) {
     const trimmed = raw.trim();
     if (!trimmed) return;
-
-    // If it’s an integer string, convert to a number; else keep as string
-    const parsedNumber = Number(trimmed);
-    const finalText: string | number =
-      !isNaN(parsedNumber) && Number.isInteger(parsedNumber)
-        ? parsedNumber
-        : trimmed;
-
-    // User’s message appears in the chat window
-    this.messages.push({ text: finalText, sender: 'user' });
-
-    // push finalText to answers array
-    this.answers.push(finalText);
-
-
-    
-    this.chatservice.SendMessageToAI(finalText).subscribe(response =>
-    {
+  
+  
+    // Normalize message
+    const userMessage = trimmed.toLowerCase() === 'hello' ? '__start__' : trimmed;
+  
+  
+    // Show user's message
+    this.messages.push({ text: trimmed, sender: 'user' });
+  
+  
+    // Send to backend
+    this.chatservice.SendMessageToAI(userMessage).subscribe(response => {
       this.messages.push({ text: response.response, sender: 'bot' });
-
+  
+  
+      // ✅ Auto scroll after update
+      setTimeout(() => this.scrollToBottom(), 0);
     });
-
-    
-
-    // Auto‐scroll after view updates
-    setTimeout(() => this.scrollToBottom(), 0);
   }
+
 
   private scrollToBottom(): void {
     const el = this.chatBodyRef.nativeElement;
