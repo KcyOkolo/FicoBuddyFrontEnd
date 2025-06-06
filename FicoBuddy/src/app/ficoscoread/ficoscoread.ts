@@ -17,10 +17,9 @@ import { Component } from '@angular/core';
   styles: [`
   
     .fico-wrapper {
-  margin-top: 32px;
   position: relative;
   max-width: 100px;
-  width: 80%;            
+  width: 90%;            
   
   min-width: 150px;      
 }
