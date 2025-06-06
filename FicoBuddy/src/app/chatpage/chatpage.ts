@@ -240,42 +240,38 @@ export class Chatpage implements OnInit {
   // As soon as this component mounts, push an initial bot question
   ngOnInit() {
     
-  this.chatservice.SendMessageToAI("__start__").subscribe(response => {
+  this.chatservice.SendMessageToAI(userMessage).subscribe(response => {
     this.messages.push({ text: response.response, sender: 'bot' });
+  
+  
+    if (response.field && response.answer) {
+  	  this.answers.push(`${response.field}: ${response.answer}`);
+    }
+  
+  
     setTimeout(() => this.scrollToBottom(), 0);
-});
+  });
 
+
+    handleSend(raw: string) {
+      const trimmed = raw.trim();
+      if (!trimmed) return;
     
-
     
-    // Scroll “just in case”
-    setTimeout(() => this.scrollToBottom(), 0);
-  }
+      const userMessage = trimmed.toLowerCase() === 'hello' ? '__start__' : trimmed;
+    
+    
+      this.messages.push({ text: trimmed, sender: 'user' });
+    
+    
+      this.chatservice.SendMessageToAI(userMessage).subscribe(response => {
+        this.messages.push({ text: response.response, sender: 'bot' });
+    
+    
+        setTimeout(() => this.scrollToBottom(), 0);
+      });
+      }
 
-
-
-  handleSend(raw: string) {
-    const trimmed = raw.trim();
-    if (!trimmed) return;
-  
-  
-    // Normalize message
-    const userMessage = trimmed.toLowerCase() === 'hello' ? '__start__' : trimmed;
-  
-  
-    // Show user's message
-    this.messages.push({ text: trimmed, sender: 'user' });
-  
-  
-    // Send to backend
-    this.chatservice.SendMessageToAI(userMessage).subscribe(response => {
-      this.messages.push({ text: response.response, sender: 'bot' });
-  
-  
-      // ✅ Auto scroll after update
-      setTimeout(() => this.scrollToBottom(), 0);
-    });
-  }
 
 
   private scrollToBottom(): void {
