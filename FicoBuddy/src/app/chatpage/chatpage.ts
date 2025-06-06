@@ -221,6 +221,7 @@ export class Chatpage implements OnInit, AfterViewChecked {
   messages:  ChatMessage[]           = [];
   questions: string[]                = [];
   answers:   Array<string | number>  = [];
+  showRecommendations: boolean =false;
   private shouldScrollChat = false;
 
   /** New property added below: */
