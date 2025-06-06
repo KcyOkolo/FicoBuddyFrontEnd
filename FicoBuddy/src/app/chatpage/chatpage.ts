@@ -60,6 +60,7 @@ interface ChatMessage {
       <app-chatresponsesummary
         [questions]="questions"
         [answers]="answers"
+        [showRecommendations]="showRecommendations"
       ></app-chatresponsesummary>
     </div>
   `,
@@ -212,6 +213,7 @@ export class Chatpage implements OnInit, AfterViewChecked {
   messages:  ChatMessage[]           = [];
   questions: string[]                = [];   // store AI questions
   answers:   Array<string | number>  = [];    // store user answers
+  showRecommendations: boolean = false;
 
   private shouldScrollChat = false; // flag to trigger auto-scroll
 
@@ -244,6 +246,7 @@ export class Chatpage implements OnInit, AfterViewChecked {
       this.messages.push({ text: res.response, sender: 'bot' });
       this.questions.push(res.response);
       this.shouldScrollChat = true;
+      this.showRecommendations = res.showRecommendations;
     });
   }
 

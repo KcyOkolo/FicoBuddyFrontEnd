@@ -32,7 +32,11 @@ import {
           </div>
         </ng-container>
 
-        <button class="action-plan-button">Get Action Plan</button>
+        <button 
+          *ngIf="showRecommendations" 
+          class="action-plan-button">
+          Get Action Plan
+        </button>
       </div>
     </div>
   `,
@@ -124,6 +128,7 @@ export class Chatresponsesummary implements AfterViewChecked {
   /** Both arrays come from <app-chatpage> */
   @Input() questions: string[]               = [];
   @Input() answers:   (string | number)[]    = [];
+  @Input() showRecommendations: boolean = false;
 
   @ViewChild('summaryBody', { static: false })
   private summaryBodyRef!: ElementRef<HTMLDivElement>;
