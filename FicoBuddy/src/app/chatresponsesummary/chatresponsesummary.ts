@@ -135,6 +135,7 @@ export class Chatresponsesummary implements AfterViewChecked {
 
   /** Emit when the “Get Action Plan” button is pressed */
   @Output() actionPlanRequested = new EventEmitter<void>();
+  @Input() showRecommendations: boolean = false;
 
   @ViewChild('summaryBody', { static: false })
   private summaryBodyRef!: ElementRef<HTMLDivElement>;

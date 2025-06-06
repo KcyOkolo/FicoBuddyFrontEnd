@@ -254,6 +254,7 @@ export class Chatpage implements OnInit, AfterViewChecked {
       this.messages.push({ text: res.response, sender: 'bot' });
       this.questions.push(res.response);
       this.shouldScrollChat = true;
+      this.showRecommendations = res.showRecommendations;
     });
   }
 
