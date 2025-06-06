@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  AfterViewChecked,
+  ElementRef,
+  ViewChild
+} from '@angular/core';
 
 @Component({
   selector: 'app-chatresponsesummary',
@@ -11,7 +17,10 @@ import { Component, Input } from '@angular/core';
       <div class="chatheader"></div>
 
       <!-- Summary body: questions + user answers -->
-      <div class="summary-body">
+      <div
+        class="summary-body"
+        #summaryBody
+      >
         <h3 class="responses-title">Responses:</h3>
 
         <!-- Loop over answers; i is index → question[i] -->
@@ -117,16 +126,38 @@ import { Component, Input } from '@angular/core';
     }
   `]
 })
-export class Chatresponsesummary {
+export class Chatresponsesummary implements AfterViewChecked {
   /**
-   * The parent <app-chatpage> will pass in every user answer 
+   * Parent <app-chatpage> will pass in every user answer 
    * as this `answers` array. 
    */
   @Input() answers: Array<string | number> = [];
 
-  
+  /**
+   * Hard‐coded list of questions. The i-th element here
+   * appears above the i-th answer in `answers[]`.
+   */
   questions: string[] = [
-    'Firstly, what is your current credit score?',
-    // add second question here
+    "What percent of your available credit are you currently using? (e.g., 10%, 30%)",
+    "Roughly how many times have you missed a payment in the past?",
+    "How many years have you had any form of credit like loans or credit cards?",
+    "About how much total money do you currently owe (credit cards, loans, etc)?",
+    "How much do you pay monthly on all loans and credit cards combined?",
+    "How many times have you applied for credit in the last year?",
+    "How many credit cards do you actively use?",
+    "How much do you usually owe monthly across all accounts?",
+    "What is your total yearly income before taxes?",
+    "How much money do you usually save or invest monthly?"
   ];
+
+  @ViewChild('summaryBody', { static: false })
+  private summaryBodyRef!: ElementRef<HTMLDivElement>;
+
+  ngAfterViewChecked() {
+    // Auto‐scroll to bottom whenever the view has been updated
+    if (this.summaryBodyRef) {
+      const el = this.summaryBodyRef.nativeElement;
+      el.scrollTop = el.scrollHeight;
+    }
+  }
 }
