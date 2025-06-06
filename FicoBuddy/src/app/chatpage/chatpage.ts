@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, AfterViewChecked } from '@angular/core';
 import { CommonModule }        from '@angular/common';
 import { Chatresponsesummary } from '../chatresponsesummary/chatresponsesummary';
 import { Chat }                from '../chat';
@@ -29,9 +29,7 @@ interface ChatMessage {
               <img class="bot-avatar"
                    src="/FICO_Circle_RGB_Blue.png"
                    alt="Bot Avatar" />
-              <div class="bot-message">
-                {{ msg.text }}
-              </div>
+              <div class="bot-message">{{ msg.text }}</div>
             </div>
             <!-- USER MESSAGE -->
             <div *ngIf="msg.sender === 'user'" class="user-message">
@@ -210,10 +208,12 @@ interface ChatMessage {
     }
   `]
 })
-export class Chatpage implements OnInit {
+export class Chatpage implements OnInit, AfterViewChecked {
   messages:  ChatMessage[]           = [];
   questions: string[]                = [];   // store AI questions
-  answers:   Array<string | number>  = [];   // store user answers
+  answers:   Array<string | number>  = [];    // store user answers
+
+  private shouldScrollChat = false; // flag to trigger auto-scroll
 
   constructor(private chatservice: Chat) {}
 
@@ -223,10 +223,9 @@ export class Chatpage implements OnInit {
   /* ------------ initial bot greeting ------------- */
   ngOnInit(): void {
     this.chatservice.SendMessageToAI('__start__').subscribe(res => {
-      /* append question text into both messages and questions[] */
       this.messages.push({ text: res.response, sender: 'bot' });
       this.questions.push(res.response);
-      this.deferScroll();
+      this.shouldScrollChat = true;
     });
   }
 
@@ -238,25 +237,21 @@ export class Chatpage implements OnInit {
     /* show user message */
     this.messages.push({ text: trimmed, sender: 'user' });
     this.answers.push(trimmed);
-    this.deferScroll();
+    this.shouldScrollChat = true;
 
     /* send to AI; expect next question in res.response */
     this.chatservice.SendMessageToAI(trimmed).subscribe(res => {
       this.messages.push({ text: res.response, sender: 'bot' });
       this.questions.push(res.response);
-      this.deferScroll();
+      this.shouldScrollChat = true;
     });
   }
 
-  /* ------------ scrolling helpers ----------------- */
-  private deferScroll(): void {
-    setTimeout(() => this.scrollToBottom(), 0);
-  }
-
-  private scrollToBottom(): void {
-    if (this.chatBodyRef) {
+  ngAfterViewChecked(): void {
+    if (this.shouldScrollChat && this.chatBodyRef) {
       const el = this.chatBodyRef.nativeElement;
       el.scrollTop = el.scrollHeight;
+      this.shouldScrollChat = false;
     }
   }
 }
