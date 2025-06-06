@@ -235,12 +235,15 @@ export class Chatpage implements OnInit, AfterViewChecked {
 
   /* ------------ initial bot greeting ------------- */
   ngOnInit(): void {
+  if (this.messages.length === 0) {
     this.chatservice.SendMessageToAI('__start__').subscribe(res => {
       this.messages.push({ text: res.response, sender: 'bot' });
       this.questions.push(res.response);
       this.shouldScrollChat = true;
+      this.showRecommendations = res.showRecommendations;
     });
   }
+}
 
   /* ------------ handle user input ---------------- */
   handleSend(raw: string): void {
