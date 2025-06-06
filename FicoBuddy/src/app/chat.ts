@@ -14,4 +14,8 @@ export class Chat {
   SendMessageToAI(userinput: string | number): Observable<any>{
     return this.http.post(`${this.apiUrl}/api/chat`, {message: userinput});
   }
+
+  InitialAI():Observable<any>{
+    return this.http.get(`${this.apiUrl}/api/chat`);
+  }
 }

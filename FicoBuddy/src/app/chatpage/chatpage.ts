@@ -7,7 +7,7 @@ import { Chat } from '../chat';
 
 
 interface ChatMessage {
-  text: string | number;
+  text: any;
   sender: 'bot' | 'user';
 }
 
@@ -238,10 +238,14 @@ export class Chatpage implements OnInit {
 
   // As soon as this component mounts, push an initial bot question
   ngOnInit() {
-    this.messages.push({
-      text: 'Firstly, what is your current credit score?',
-      sender: 'bot'
+    this.chatservice.InitialAI().subscribe(res=>{
+      this.messages.push({
+      text: res.response,
+      sender: "bot"
     });
+    });
+
+    
 
     // Scroll “just in case”
     setTimeout(() => this.scrollToBottom(), 0);
