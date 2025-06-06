@@ -1,4 +1,12 @@
-import { Component, ElementRef, ViewChild, OnInit, AfterViewChecked } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  OnInit,
+  AfterViewChecked,
+  Output,
+  EventEmitter
+} from '@angular/core';
 import { CommonModule }        from '@angular/common';
 import { Chatresponsesummary } from '../chatresponsesummary/chatresponsesummary';
 import { Chat }                from '../chat';
@@ -56,11 +64,12 @@ interface ChatMessage {
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: pass BOTH arrays -->
+      <!-- RIGHT COLUMN: listen for actionPlanRequested from child -->
       <app-chatresponsesummary
         [questions]="questions"
         [answers]="answers"
-      ></app-chatresponsesummary>
+        (actionPlanRequested)="emitActionPlanEvent()">
+      </app-chatresponsesummary>
     </div>
   `,
   styles: [`
@@ -210,10 +219,11 @@ interface ChatMessage {
 })
 export class Chatpage implements OnInit, AfterViewChecked {
   messages:  ChatMessage[]           = [];
-  questions: string[]                = [];   // store AI questions
-  answers:   Array<string | number>  = [];    // store user answers
+  questions: string[]                = [];
+  answers:   Array<string | number>  = [];
+  private shouldScrollChat = false;
 
-  private shouldScrollChat = false; // flag to trigger auto-scroll
+  @Output() actionPlanRequested = new EventEmitter<void>();
 
   constructor(private chatservice: Chat) {}
 
@@ -245,6 +255,10 @@ export class Chatpage implements OnInit, AfterViewChecked {
       this.questions.push(res.response);
       this.shouldScrollChat = true;
     });
+  }
+
+  emitActionPlanEvent() {
+    this.actionPlanRequested.emit();
   }
 
   ngAfterViewChecked(): void {

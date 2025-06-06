@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   Input,
+  Output,
+  EventEmitter,
   AfterViewChecked,
   ElementRef,
   ViewChild
@@ -32,7 +34,13 @@ import {
           </div>
         </ng-container>
 
-        <button class="action-plan-button">Get Action Plan</button>
+        <!-- “Get Action Plan” button now emits an event -->
+        <button
+          class="action-plan-button"
+          (click)="actionPlanRequested.emit()"
+        >
+          Get Action Plan
+        </button>
       </div>
     </div>
   `,
@@ -124,6 +132,9 @@ export class Chatresponsesummary implements AfterViewChecked {
   /** Both arrays come from <app-chatpage> */
   @Input() questions: string[]               = [];
   @Input() answers:   (string | number)[]    = [];
+
+  /** Emit when the “Get Action Plan” button is pressed */
+  @Output() actionPlanRequested = new EventEmitter<void>();
 
   @ViewChild('summaryBody', { static: false })
   private summaryBodyRef!: ElementRef<HTMLDivElement>;
