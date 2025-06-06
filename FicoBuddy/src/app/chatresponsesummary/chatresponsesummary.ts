@@ -6,6 +6,7 @@ import {
   ElementRef,
   ViewChild
 } from '@angular/core';
+import { Chat } from '../chat';
 
 @Component({
   selector: 'app-chatresponsesummary',
@@ -36,7 +37,8 @@ import {
         </ng-container>
 
         <!-- “Get Action Plan” button at bottom -->
-        <button class="action-plan-button">
+        <button 
+        class="action-plan-button">
           Get Action Plan
         </button>
       </div>
@@ -127,6 +129,12 @@ import {
   `]
 })
 export class Chatresponsesummary implements AfterViewChecked {
+
+
+  constructor(private chatservice: Chat){};
+
+
+
   /**
    * Parent <app-chatpage> will pass in every user answer 
    * as this `answers` array. 

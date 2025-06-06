@@ -22,4 +22,9 @@ export class Chat {
     }
   });
 }
+
+
+  GetAIRecommendations(userinput: string): Observable<any>{
+    return this.http.post(`${this.apiUrl}/api/score`, {recommendation: userinput});
+  }
 }

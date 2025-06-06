@@ -6,6 +6,7 @@ import { Chatresponsesummary }    from '../chatresponsesummary/chatresponsesumma
 import { Chat } from '../chat';
 
 
+
 interface ChatMessage {
   text: any;
   sender: 'bot' | 'user';
@@ -238,12 +239,12 @@ export class Chatpage implements OnInit {
 
   // As soon as this component mounts, push an initial bot question
   ngOnInit() {
-    this.chatservice.InitialAI().subscribe(res=>{
-      this.messages.push({
-      text: res.message,
+    
+    this.messages.push({
+      text: "To begin, say 'hello'",
       sender: "bot"
     });
-    });
+    
 
     
 
