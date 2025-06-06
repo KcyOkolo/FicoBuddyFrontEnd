@@ -72,9 +72,8 @@ interface ChatMessage {
       </div>
 
       <!-- RIGHT COLUMN: Responses -->
-      <app-chatresponsesummary
-        [answers]="answers"
-      ></app-chatresponsesummary>
+       <app-chatresponsesummary [answers]="answers"></app-chatresponsesummary>
+
 
     </div>
   `,
