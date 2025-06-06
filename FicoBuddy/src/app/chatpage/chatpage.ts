@@ -228,50 +228,47 @@ export class Chatpage implements OnInit {
   messages: ChatMessage[] = [];
   answers: Array<string | number> = [];
 
-  constructor(private chatservice: Chat){};
 
-  
+  constructor(private chatservice: Chat) {}
 
-  
 
   @ViewChild('chatBody', { static: false })
   private chatBodyRef!: ElementRef<HTMLDivElement>;
 
-  // As soon as this component mounts, push an initial bot question
+
   ngOnInit() {
-    
-  this.chatservice.SendMessageToAI(userMessage).subscribe(response => {
-    this.messages.push({ text: response.response, sender: 'bot' });
-  
-  
-    if (response.field && response.answer) {
-  	  this.answers.push(`${response.field}: ${response.answer}`);
-    }
-  
-  
+    this.messages.push({
+      text: "To begin, say 'hello'",
+      sender: "bot"
+    });
     setTimeout(() => this.scrollToBottom(), 0);
-  });
+  }
 
 
-    handleSend(raw: string) {
-      const trimmed = raw.trim();
-      if (!trimmed) return;
-    
-    
-      const userMessage = trimmed.toLowerCase() === 'hello' ? '__start__' : trimmed;
-    
-    
-      this.messages.push({ text: trimmed, sender: 'user' });
-    
-    
-      this.chatservice.SendMessageToAI(userMessage).subscribe(response => {
-        this.messages.push({ text: response.response, sender: 'bot' });
-    
-    
-        setTimeout(() => this.scrollToBottom(), 0);
-      });
+  handleSend(raw: string) {
+    const trimmed = raw.trim();
+    if (!trimmed) return;
+
+
+    const userMessage = trimmed.toLowerCase() === 'hello' ? '__start__' : trimmed;
+
+
+    this.messages.push({ text: trimmed, sender: 'user' });
+
+
+    this.chatservice.SendMessageToAI(userMessage).subscribe(response => {
+      this.messages.push({ text: response.response, sender: 'bot' });
+
+
+      // ✅ New: Store response field/answer if provided
+      if (response.field && response.answer) {
+        this.answers.push(`${response.field}: ${response.answer}`);
       }
 
+
+      setTimeout(() => this.scrollToBottom(), 0);
+    });
+  }
 
 
   private scrollToBottom(): void {
@@ -279,3 +276,4 @@ export class Chatpage implements OnInit {
     el.scrollTop = el.scrollHeight;
   }
 }
+
