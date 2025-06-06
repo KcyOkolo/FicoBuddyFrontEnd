@@ -224,8 +224,6 @@ export class Chatpage implements OnInit, AfterViewChecked {
   showRecommendations: boolean =false;
   private shouldScrollChat = false;
 
-  /** New property added below: */
-  showRecommendations = false;
 
   @Output() actionPlanRequested = new EventEmitter<void>();
 
