@@ -36,8 +36,11 @@ import {
 
         <!-- “Get Action Plan” button now emits an event -->
         <button
+        *ngIf="showRecommendations"
           class="action-plan-button"
+          
           (click)="actionPlanRequested.emit()"
+
         >
           Get Action Plan
         </button>
