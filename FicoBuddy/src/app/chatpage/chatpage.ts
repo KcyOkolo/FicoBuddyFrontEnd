@@ -237,12 +237,15 @@ export class Chatpage implements OnInit {
 
 
   ngOnInit() {
-    this.messages.push({
-      text: "To begin, say 'hello'",
-      sender: "bot"
+    this.chatservice.SendMessageToAI("__start__").subscribe(response => {
+      this.messages.push({ text: response.response, sender: 'bot' });
+  
+  
+      // Auto scroll after first bot message
+      setTimeout(() => this.scrollToBottom(), 0);
     });
-    setTimeout(() => this.scrollToBottom(), 0);
   }
+
 
 
   handleSend(raw: string) {
@@ -259,11 +262,10 @@ export class Chatpage implements OnInit {
     this.chatservice.SendMessageToAI(userMessage).subscribe(response => {
       this.messages.push({ text: response.response, sender: 'bot' });
 
+    if (response.field && response.answer) {
+      this.answers.push(`${response.field}: ${response.answer}`);
+    }
 
-      // ✅ New: Store response field/answer if provided
-      if (response.field && response.answer) {
-        this.answers.push(`${response.field}: ${response.answer}`);
-      }
 
 
       setTimeout(() => this.scrollToBottom(), 0);
