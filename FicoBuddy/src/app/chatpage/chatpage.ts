@@ -1,11 +1,8 @@
 
-
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { CommonModule }           from '@angular/common';
 import { Chatresponsesummary }    from '../chatresponsesummary/chatresponsesummary';
-import { Chat } from '../chat';
-
-
+import { Chat }                   from '../chat';
 
 interface ChatMessage {
   text: any;
@@ -24,11 +21,7 @@ interface ChatMessage {
       <div class="chat-container">
         <!-- Chat Header -->
         <div class="chatheader">
-          <img
-            class="ficologo"
-            src="ficowhitelogo.png"
-            alt="FICO Logo"
-          />
+          <img class="ficologo" src="ficowhitelogo.png" alt="FICO Logo" />
         </div>
 
         <!-- Chat Body: loop through all messages -->
@@ -36,14 +29,8 @@ interface ChatMessage {
           <ng-container *ngFor="let msg of messages">
             <!-- BOT MESSAGE ROW -->
             <div *ngIf="msg.sender === 'bot'" class="bot-row">
-              <img
-                class="bot-avatar"
-                src="/FICO_Circle_RGB_Blue.png"
-                alt="Bot Avatar"
-              />
-              <div class="bot-message">
-                {{ msg.text }}
-              </div>
+              <img class="bot-avatar" src="/FICO_Circle_RGB_Blue.png" alt="Bot Avatar" />
+              <div class="bot-message">{{ msg.text }}</div>
             </div>
 
             <!-- USER MESSAGE ROW -->
@@ -72,9 +59,7 @@ interface ChatMessage {
       </div>
 
       <!-- RIGHT COLUMN: Responses -->
-       <app-chatresponsesummary [answers]="answers"></app-chatresponsesummary>
-
-
+      <app-chatresponsesummary [answers]="answers"></app-chatresponsesummary>
     </div>
   `,
   styles: [`
@@ -227,54 +212,61 @@ export class Chatpage implements OnInit {
   messages: ChatMessage[] = [];
   answers: Array<string | number> = [];
 
-
   constructor(private chatservice: Chat) {}
-
 
   @ViewChild('chatBody', { static: false })
   private chatBodyRef!: ElementRef<HTMLDivElement>;
 
-
+  /* ---------------- INITIAL BOT GREETING ---------------- */
   ngOnInit() {
-    this.chatservice.SendMessageToAI("__start__").subscribe(response => {
-      this.messages.push({ text: response.response, sender: 'bot' });
-  
-  
-      // Auto scroll after first bot message
-      setTimeout(() => this.scrollToBottom(), 0);
+    this.chatservice.SendMessageToAI('__start__').subscribe(res => {
+      this.messages.push({ text: res.response, sender: 'bot' });
+      this.deferScroll();   // auto-scroll after first bot message
     });
   }
 
-
-
+  /* ---------------- HANDLE USER INPUT ------------------ */
   handleSend(raw: string) {
     const trimmed = raw.trim();
     if (!trimmed) return;
 
+    /* Convert pure-integer strings to numbers; otherwise leave as-is */
+    const num = Number(trimmed);
+    const userText: string | number =
+      !isNaN(num) && Number.isInteger(num) ? num : trimmed;
 
-    const userMessage = trimmed.toLowerCase() === 'hello' ? '__start__' : trimmed;
+    /* show user message */
+    this.messages.push({ text: userText, sender: 'user' });
+    this.deferScroll();               // scroll after user message
 
+    /* prepare payload for AI */
+    const payload = trimmed.toLowerCase() === 'hello' ? '__start__' : trimmed;
 
-    this.messages.push({ text: trimmed, sender: 'user' });
+    /* send to AI and handle response */
+    this.chatservice.SendMessageToAI(payload).subscribe(res => {
+      /* show AI reply */
+      this.messages.push({ text: res.response, sender: 'bot' });
 
+      /* record field/answer pairs if provided */
+      if (res.field && res.answer) {
+        this.answers.push(`${res.field}: ${res.answer}`);
+      }
 
-    this.chatservice.SendMessageToAI(userMessage).subscribe(response => {
-      this.messages.push({ text: response.response, sender: 'bot' });
-
-    if (response.field && response.answer) {
-      this.answers.push(`${response.field}: ${response.answer}`);
-    }
-
-
-
-      setTimeout(() => this.scrollToBottom(), 0);
+      this.deferScroll();             // scroll after AI reply
     });
   }
 
+  /* ---------------- SCROLL HELPERS --------------------- */
+  /** Scroll after the current change-detection tick */
+  private deferScroll(): void {
+    setTimeout(() => this.scrollToBottom(), 0);
+  }
 
   private scrollToBottom(): void {
-    const el = this.chatBodyRef.nativeElement;
-    el.scrollTop = el.scrollHeight;
+    if (this.chatBodyRef) {
+      const el = this.chatBodyRef.nativeElement;
+      el.scrollTop = el.scrollHeight;
+    }
   }
 }
 

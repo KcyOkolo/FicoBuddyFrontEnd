@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class Chat {
-  private apiUrl = "https://known-highly-treefrog.ngrok-free.app"; //put local back end url here
+  private apiUrl = "https://known-highly-treefrog.ngrok-free.app";
 
 
   constructor(private http: HttpClient) { }
