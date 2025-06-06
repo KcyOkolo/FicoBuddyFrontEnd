@@ -6,7 +6,6 @@ import {
   ElementRef,
   ViewChild
 } from '@angular/core';
-import { Chat } from '../chat';
 
 @Component({
   selector: 'app-chatresponsesummary',
@@ -17,14 +16,11 @@ import { Chat } from '../chat';
       <!-- Blue header bar -->
       <div class="chatheader"></div>
 
-      <!-- Summary body: questions + user answers -->
-      <div
-        class="summary-body"
-        #summaryBody
-      >
+      <!-- scrollable body -->
+      <div #summaryBody class="summary-body">
         <h3 class="responses-title">Responses:</h3>
 
-        <!-- Loop over answers; i is index → question[i] -->
+        <!-- Loop over answers; show questions[i] beside answers[i] -->
         <ng-container *ngFor="let ans of answers; index as i">
           <div class="response-item">
             <strong class="question-text">
@@ -36,11 +32,7 @@ import { Chat } from '../chat';
           </div>
         </ng-container>
 
-        <!-- “Get Action Plan” button at bottom -->
-        <button 
-        class="action-plan-button">
-          Get Action Plan
-        </button>
+        <button class="action-plan-button">Get Action Plan</button>
       </div>
     </div>
   `,
@@ -50,13 +42,13 @@ import { Chat } from '../chat';
       max-width: 309px;
       width: 100%;
       min-width: 330px;
-      height: 600px;           
+      height: 600px;
       border-radius: 20px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      flex: none;              
+      flex: none;
     }
 
     .chatheader {
@@ -129,40 +121,15 @@ import { Chat } from '../chat';
   `]
 })
 export class Chatresponsesummary implements AfterViewChecked {
-
-
-  constructor(private chatservice: Chat){};
-
-
-
-  /**
-   * Parent <app-chatpage> will pass in every user answer 
-   * as this `answers` array. 
-   */
-  @Input() answers: Array<string | number> = [];
-
-  /**
-   * Hard‐coded list of questions. The i-th element here
-   * appears above the i-th answer in `answers[]`.
-   */
-  questions: string[] = [
-    "What percent of your available credit are you currently using? (e.g., 10%, 30%)",
-    "Roughly how many times have you missed a payment in the past?",
-    "How many years have you had any form of credit like loans or credit cards?",
-    "About how much total money do you currently owe (credit cards, loans, etc)?",
-    "How much do you pay monthly on all loans and credit cards combined?",
-    "How many times have you applied for credit in the last year?",
-    "How many credit cards do you actively use?",
-    "How much do you usually owe monthly across all accounts?",
-    "What is your total yearly income before taxes?",
-    "How much money do you usually save or invest monthly?"
-  ];
+  /** Both arrays come from <app-chatpage> */
+  @Input() questions: string[]               = [];
+  @Input() answers:   (string | number)[]    = [];
 
   @ViewChild('summaryBody', { static: false })
   private summaryBodyRef!: ElementRef<HTMLDivElement>;
 
-  ngAfterViewChecked() {
-    // Auto‐scroll to bottom whenever the view has been updated
+  /* auto-scroll the summary list whenever it updates */
+  ngAfterViewChecked(): void {
     if (this.summaryBodyRef) {
       const el = this.summaryBodyRef.nativeElement;
       el.scrollTop = el.scrollHeight;

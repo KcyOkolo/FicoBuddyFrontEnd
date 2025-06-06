@@ -1,8 +1,7 @@
-
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
-import { CommonModule }           from '@angular/common';
-import { Chatresponsesummary }    from '../chatresponsesummary/chatresponsesummary';
-import { Chat }                   from '../chat';
+import { CommonModule }        from '@angular/common';
+import { Chatresponsesummary } from '../chatresponsesummary/chatresponsesummary';
+import { Chat }                from '../chat';
 
 interface ChatMessage {
   text: any;
@@ -12,28 +11,29 @@ interface ChatMessage {
 @Component({
   selector: 'app-chatpage',
   standalone: true,
-  imports: [ CommonModule, Chatresponsesummary ],
+  imports: [CommonModule, Chatresponsesummary],
   template: `
     <!-- Outer flex container: LEFT = Chatbox, RIGHT = Responses -->
     <div class="page-wrapper">
-
       <!-- LEFT COLUMN: Chatbox -->
       <div class="chat-container">
-        <!-- Chat Header -->
         <div class="chatheader">
           <img class="ficologo" src="ficowhitelogo.png" alt="FICO Logo" />
         </div>
 
-        <!-- Chat Body: loop through all messages -->
+        <!-- Chat Body: display messages -->
         <div class="chatbody" #chatBody>
           <ng-container *ngFor="let msg of messages">
-            <!-- BOT MESSAGE ROW -->
+            <!-- BOT MESSAGE -->
             <div *ngIf="msg.sender === 'bot'" class="bot-row">
-              <img class="bot-avatar" src="/FICO_Circle_RGB_Blue.png" alt="Bot Avatar" />
-              <div class="bot-message">{{ msg.text }}</div>
+              <img class="bot-avatar"
+                   src="/FICO_Circle_RGB_Blue.png"
+                   alt="Bot Avatar" />
+              <div class="bot-message">
+                {{ msg.text }}
+              </div>
             </div>
-
-            <!-- USER MESSAGE ROW -->
+            <!-- USER MESSAGE -->
             <div *ngIf="msg.sender === 'user'" class="user-message">
               {{ msg.text }}
             </div>
@@ -58,8 +58,11 @@ interface ChatMessage {
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: Responses -->
-      <app-chatresponsesummary [answers]="answers"></app-chatresponsesummary>
+      <!-- RIGHT COLUMN: pass BOTH arrays -->
+      <app-chatresponsesummary
+        [questions]="questions"
+        [answers]="answers"
+      ></app-chatresponsesummary>
     </div>
   `,
   styles: [`
@@ -68,7 +71,7 @@ interface ChatMessage {
        -------------------------------- */
     .page-wrapper {
       display: flex;
-      gap: 24px;          
+      gap: 24px;
       max-width: 1200px;
       margin: 0 auto;
       padding: 24px;
@@ -78,12 +81,12 @@ interface ChatMessage {
         CHAT BOX (left)
        ----------------------- */
     .chat-container {
-      flex: none;          
-      width: 800px;         
+      flex: none;
+      width: 800px;
       display: flex;
       flex-direction: column;
       background-color: white;
-      height: 600px;        
+      height: 600px;
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -204,60 +207,48 @@ interface ChatMessage {
       .chat-container {
         width: 90%;
       }
-     
     }
   `]
 })
 export class Chatpage implements OnInit {
-  messages: ChatMessage[] = [];
-  answers: Array<string | number> = [];
+  messages:  ChatMessage[]           = [];
+  questions: string[]                = [];   // store AI questions
+  answers:   Array<string | number>  = [];   // store user answers
 
   constructor(private chatservice: Chat) {}
 
   @ViewChild('chatBody', { static: false })
   private chatBodyRef!: ElementRef<HTMLDivElement>;
 
-  /* ---------------- INITIAL BOT GREETING ---------------- */
-  ngOnInit() {
+  /* ------------ initial bot greeting ------------- */
+  ngOnInit(): void {
     this.chatservice.SendMessageToAI('__start__').subscribe(res => {
+      /* append question text into both messages and questions[] */
       this.messages.push({ text: res.response, sender: 'bot' });
-      this.deferScroll();   // auto-scroll after first bot message
+      this.questions.push(res.response);
+      this.deferScroll();
     });
   }
 
-  /* ---------------- HANDLE USER INPUT ------------------ */
-  handleSend(raw: string) {
+  /* ------------ handle user input ---------------- */
+  handleSend(raw: string): void {
     const trimmed = raw.trim();
     if (!trimmed) return;
 
-    /* Convert pure-integer strings to numbers; otherwise leave as-is */
-    const num = Number(trimmed);
-    const userText: string | number =
-      !isNaN(num) && Number.isInteger(num) ? num : trimmed;
-
     /* show user message */
-    this.messages.push({ text: userText, sender: 'user' });
-    this.deferScroll();               // scroll after user message
+    this.messages.push({ text: trimmed, sender: 'user' });
+    this.answers.push(trimmed);
+    this.deferScroll();
 
-    /* prepare payload for AI */
-    const payload = trimmed.toLowerCase() === 'hello' ? '__start__' : trimmed;
-
-    /* send to AI and handle response */
-    this.chatservice.SendMessageToAI(payload).subscribe(res => {
-      /* show AI reply */
+    /* send to AI; expect next question in res.response */
+    this.chatservice.SendMessageToAI(trimmed).subscribe(res => {
       this.messages.push({ text: res.response, sender: 'bot' });
-
-      /* record field/answer pairs if provided */
-      if (res.field && res.answer) {
-        this.answers.push(`${res.field}: ${res.answer}`);
-      }
-
-      this.deferScroll();             // scroll after AI reply
+      this.questions.push(res.response);
+      this.deferScroll();
     });
   }
 
-  /* ---------------- SCROLL HELPERS --------------------- */
-  /** Scroll after the current change-detection tick */
+  /* ------------ scrolling helpers ----------------- */
   private deferScroll(): void {
     setTimeout(() => this.scrollToBottom(), 0);
   }
@@ -269,4 +260,3 @@ export class Chatpage implements OnInit {
     }
   }
 }
-
