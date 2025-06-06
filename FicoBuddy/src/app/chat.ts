@@ -15,7 +15,11 @@ export class Chat {
     return this.http.post(`${this.apiUrl}/api/chat`, {message: userinput});
   }
 
-  InitialAI():Observable<any>{
-    return this.http.get(`${this.apiUrl}/api/chat`);
-  }
+  InitialAI(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/api/chat`, {
+    headers: {
+      'ngrok-skip-browser-warning': 'true'
+    }
+  });
+}
 }

@@ -240,7 +240,7 @@ export class Chatpage implements OnInit {
   ngOnInit() {
     this.chatservice.InitialAI().subscribe(res=>{
       this.messages.push({
-      text: res.response,
+      text: res.message,
       sender: "bot"
     });
     });
